@@ -10,7 +10,11 @@ mvn test
 
 Or run the test in your IDE. Fix the failing tests and learn more.
 
-Start with **loadJdbcDriver**.
+## How to
+
+Fork & clone this repo locally and get going with **loadJdbcDriver**.
+
+
 
 
 
