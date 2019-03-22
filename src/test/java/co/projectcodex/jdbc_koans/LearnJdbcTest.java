@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 public class LearnJdbcTest {
 
-    final String KOANS_DATABASE_URL = "jdbc:h2:~/target/jdbc_koans_db";
+    final String KOANS_DATABASE_URL = "jdbc:h2:./target/jdbc_koans_db";
 
     @BeforeEach
     public void cleanUpTables() {
@@ -50,7 +50,7 @@ public class LearnJdbcTest {
 
         try {
             Class.forName("org.h2.Driver");
-            // to fix this set the JDBC_URL to a valid value of `jdbc:h2:~/target/jdbc_koans_db` - it will create an
+            // to fix this set the JDBC_URL to a valid value of `jdbc:h2:./target/jdbc_koans_db` - it will create an
             // embedded database in the target folder
             final String JDBC_URL = "";
             Connection conn = DriverManager.getConnection(JDBC_URL);
@@ -66,7 +66,7 @@ public class LearnJdbcTest {
 
         try {
 
-            Connection conn = DriverManager.getConnection(KOANS_DATABASE_URL);
+            Connection conn = DriverManager.getConnection(KOANS_DATABASE_URL, "sa", "");
             Statement statement = conn.createStatement();
             ResultSet rs = statement.executeQuery ("select * from fruit");
 
@@ -75,7 +75,7 @@ public class LearnJdbcTest {
 
             // https://flywaydb.org/getstarted/firststeps/maven
 
-            // add a V1__create_fruit.sql file in the src/main/db/migration folder
+            // add a V1__create_fruit.sql file in the src/main/resources/db/migration folder
             // add a create table script in there to create a fruit table
 
             /*
@@ -99,11 +99,12 @@ public class LearnJdbcTest {
 
         try {
 
-            Connection conn = DriverManager.getConnection(KOANS_DATABASE_URL);
+            Connection conn = DriverManager.getConnection(KOANS_DATABASE_URL, "sa", "");
             Statement statement = conn.createStatement();
             ResultSet rs = statement.executeQuery ("select count(*) as fruit_count from fruit");
 
             if (rs.next()) {
+                // mmm... how many rows was actually added in the V2__add_fruit.sql migration file
                 assertEquals(3, rs.getInt("fruit_count"));
             }
 
@@ -130,9 +131,9 @@ public class LearnJdbcTest {
 
         try {
 
-            Connection conn = DriverManager.getConnection(KOANS_DATABASE_URL);
+            Connection conn = DriverManager.getConnection(KOANS_DATABASE_URL, "sa", "");
             final String INSERT_FRUIT_SQL = "insert into fruit (name, price) values (?, ?)";
-            final String FIND_FRUT_SQL = "select name, price from fruit where name = ?";
+            final String FIND_FRUIT_SQL = "select name, price from fruit where name = ?";
 
             // PreparedStatement are SQL statements that can be called
             // over and over with different parameters
@@ -140,11 +141,13 @@ public class LearnJdbcTest {
 
             // use it to add 2 new fruits an Orange costing 2.37 and a Guava costing 4.13
 
+            // todo - add Orange
             addFruitPreparedStatement.setString(1, "__");
             addFruitPreparedStatement.setDouble(2, 0.00);
             addFruitPreparedStatement.execute();
 
-            // todo - add a Guava costing 4.13
+            // todo - add a Guava below costing 4.13
+            // todo - add the appropriate prepared statement below
 
             ResultSet rs = conn.createStatement().executeQuery("select * as the_count from fruit where name in ('Guava', 'Orange')");
 
@@ -171,7 +174,7 @@ public class LearnJdbcTest {
 
         try {
 
-            Connection conn = DriverManager.getConnection(KOANS_DATABASE_URL);
+            Connection conn = DriverManager.getConnection(KOANS_DATABASE_URL, "sa", "");
             final String FIND_FRUT_SQL_4 = "select name, price from fruit where price > ? order by id asc";
 
             // PreparedStatement are SQL statements that can be called
@@ -209,7 +212,7 @@ public class LearnJdbcTest {
 
         try {
 
-            Connection conn = DriverManager.getConnection(KOANS_DATABASE_URL);
+            Connection conn = DriverManager.getConnection(KOANS_DATABASE_URL, "sa", "");
             final String FIND_FRUIT_BY_NAME_SQL = "select price from fruit where name = ? order by id asc";
             final String UPDATE_FRUIT_BY_NAME_SQL = "update fruit set price = ? where name = ?";
 
