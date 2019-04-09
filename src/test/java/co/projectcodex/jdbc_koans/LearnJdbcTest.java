@@ -10,21 +10,25 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 public class LearnJdbcTest {
 
-    final String KOANS_DATABASE_URL = "jdbc:h2:./target/jdbc_koans_db";
+    final String KOANS_DATABASE_URL = "";
+
+    public Connection getConnection() throws Exception {
+        // TODO - add a username of "sa" and a blank password ""
+        Connection conn = DriverManager.getConnection(KOANS_DATABASE_URL);
+        return conn;
+    }
 
     @BeforeEach
     public void cleanUpTables() {
 
         try {
-            try(Connection conn = DriverManager.getConnection(KOANS_DATABASE_URL)) {
+            try(Connection conn = getConnection()) {
                 // delete fruits that the tests are adding
 
                 Statement statement = conn.createStatement();
                 statement.addBatch("delete from fruit where name in ('Guava', 'Orange')");
                 statement.addBatch("update fruit set price = 4.75  where name = 'red apple'");
                 statement.executeBatch();
-
-                //
             }
         } catch(Exception ex) {
             System.out.println("These test will fail until the fruit table is created: " + ex);
@@ -50,12 +54,9 @@ public class LearnJdbcTest {
 
         try {
             Class.forName("org.h2.Driver");
-            // to fix this set the JDBC_URL to a valid value of `jdbc:h2:./target/jdbc_koans_db` - it will create an
+            // to fix this set the KOANS_DATABASE_URL to a valid value of `jdbc:h2:./target/jdbc_koans_db` - it will create an
             // embedded database in the target folder
-            final String JDBC_URL = "";
-            Connection conn = DriverManager.getConnection(JDBC_URL);
-
-
+            Connection conn = DriverManager.getConnection(KOANS_DATABASE_URL, "sa", "");
         } catch (Exception e) {
             fail(e);
         }
@@ -66,7 +67,8 @@ public class LearnJdbcTest {
 
         try {
 
-            Connection conn = DriverManager.getConnection(KOANS_DATABASE_URL, "sa", "");
+            //TODO - ensure you fixed the username & password in executeSQLStatement
+            Connection conn = getConnection();
             Statement statement = conn.createStatement();
             ResultSet rs = statement.executeQuery ("select * from fruit");
 
@@ -99,7 +101,7 @@ public class LearnJdbcTest {
 
         try {
 
-            Connection conn = DriverManager.getConnection(KOANS_DATABASE_URL, "sa", "");
+            Connection conn = getConnection();
             Statement statement = conn.createStatement();
             ResultSet rs = statement.executeQuery ("select count(*) as fruit_count from fruit");
 
@@ -131,7 +133,7 @@ public class LearnJdbcTest {
 
         try {
 
-            Connection conn = DriverManager.getConnection(KOANS_DATABASE_URL, "sa", "");
+            Connection conn = getConnection();
             final String INSERT_FRUIT_SQL = "insert into fruit (name, price) values (?, ?)";
             final String FIND_FRUIT_SQL = "select name, price from fruit where name = ?";
 
@@ -149,7 +151,7 @@ public class LearnJdbcTest {
             // todo - add a Guava below costing 4.13
             // todo - add the appropriate prepared statement below
 
-            ResultSet rs = conn.createStatement().executeQuery("select * as FIND_FRUIT_SQL from fruit where name in ('Guava', 'Orange')");
+            ResultSet rs = conn.createStatement().executeQuery("select * from fruit where name in ('Guava', 'Orange')");
 
             int counter = 0;
             while(rs.next()) {
@@ -174,7 +176,7 @@ public class LearnJdbcTest {
 
         try {
 
-            Connection conn = DriverManager.getConnection(KOANS_DATABASE_URL, "sa", "");
+            Connection conn = getConnection();
             final String FIND_FRUIT_SQL = "select name, price from fruit where price > ? order by id asc";
 
             // PreparedStatement are SQL statements that can be called
@@ -212,7 +214,7 @@ public class LearnJdbcTest {
 
         try {
 
-            Connection conn = DriverManager.getConnection(KOANS_DATABASE_URL, "sa", "");
+            Connection conn = getConnection();
             final String FIND_FRUIT_BY_NAME_SQL = "select price from fruit where name = ? order by id asc";
             final String UPDATE_FRUIT_BY_NAME_SQL = "update fruit set price = ? where name = ?";
 
@@ -227,7 +229,6 @@ public class LearnJdbcTest {
             findFruitPreparedStatement.setString(1, "red apple");
 
             ResultSet rs = findFruitPreparedStatement.executeQuery();
-
 
             if (rs.next()) {
                 assertEquals(5.99, rs.getDouble("price"));
