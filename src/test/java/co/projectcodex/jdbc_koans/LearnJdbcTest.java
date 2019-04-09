@@ -219,15 +219,14 @@ public class LearnJdbcTest {
             final String UPDATE_FRUIT_BY_NAME_SQL = "update fruit set price = ? where name = ?";
 
             PreparedStatement updateFruitPreparedStatement = conn.prepareStatement(UPDATE_FRUIT_BY_NAME_SQL);
+            // don't change anything above this line
 
-            // todo - set the params on the findFruitPreparedStatement and run the query;
-            // update the price to 5.99 ...
-            // use it to add 2 new fruits an Orange costing 2.37 and a Guava costing 4.13
+            // todo - use the updateFruitPreparedStatement to update the apple price to 5.99 ...
+            // todo - use the updateFruitPreparedStatement here
 
+            // don't change any code below this line
             PreparedStatement findFruitPreparedStatement = conn.prepareStatement(FIND_FRUIT_BY_NAME_SQL);
-
             findFruitPreparedStatement.setString(1, "red apple");
-
             ResultSet rs = findFruitPreparedStatement.executeQuery();
 
             if (rs.next()) {
