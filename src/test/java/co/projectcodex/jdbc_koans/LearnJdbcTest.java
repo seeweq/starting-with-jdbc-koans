@@ -149,7 +149,7 @@ public class LearnJdbcTest {
             // todo - add a Guava below costing 4.13
             // todo - add the appropriate prepared statement below
 
-            ResultSet rs = conn.createStatement().executeQuery("select * as the_count from fruit where name in ('Guava', 'Orange')");
+            ResultSet rs = conn.createStatement().executeQuery("select * as FIND_FRUIT_SQL from fruit where name in ('Guava', 'Orange')");
 
             int counter = 0;
             while(rs.next()) {
@@ -175,11 +175,11 @@ public class LearnJdbcTest {
         try {
 
             Connection conn = DriverManager.getConnection(KOANS_DATABASE_URL, "sa", "");
-            final String FIND_FRUT_SQL_4 = "select name, price from fruit where price > ? order by id asc";
+            final String FIND_FRUIT_SQL = "select name, price from fruit where price > ? order by id asc";
 
             // PreparedStatement are SQL statements that can be called
             // over and over with different parameters
-            PreparedStatement findFruitPreparedStatement = conn.prepareStatement(FIND_FRUT_SQL_4);
+            PreparedStatement findFruitPreparedStatement = conn.prepareStatement(FIND_FRUIT_SQL);
 
             // use it to add 2 new fruits an Orange costing 2.37 and a Guava costing 4.13
 
