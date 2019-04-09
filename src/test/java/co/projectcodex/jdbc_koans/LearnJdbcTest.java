@@ -14,7 +14,12 @@ public class LearnJdbcTest {
 
     public Connection getConnection() throws Exception {
         // TODO - add a username of "sa" and a blank password ""
-        Connection conn = DriverManager.getConnection(KOANS_DATABASE_URL);
+        // TODO - if the db is created via default flyway config the username will be "sa" with a blank password
+        // you can change this by removing the user element containing sa in the pom.xml file
+        // if not be sure to delete the *.db files in your target folder before running mvn flyway:migrate the first time
+        // and be sure the set the username to "sa" password blank ""
+        // if your remove the user element from the pom.xml file you are use a username of "" and a password of ""
+        Connection conn = DriverManager.getConnection(KOANS_DATABASE_URL, "sa", "");
         return conn;
     }
 
@@ -42,7 +47,7 @@ public class LearnJdbcTest {
             /*
                 To fix this error add a dependency for the H2 database driver
                 As per this link: http://www.h2database.com/html/build.html#maven2
-             */
+            */
             Class.forName("org.h2.Driver");
         } catch (ClassNotFoundException e) {
             fail(e);
@@ -56,7 +61,7 @@ public class LearnJdbcTest {
             Class.forName("org.h2.Driver");
             // to fix this set the KOANS_DATABASE_URL to a valid value of `jdbc:h2:./target/jdbc_koans_db` - it will create an
             // embedded database in the target folder
-            Connection conn = DriverManager.getConnection(KOANS_DATABASE_URL, "sa", "");
+            Connection conn = DriverManager.getConnection(KOANS_DATABASE_URL, "", "");
         } catch (Exception e) {
             fail(e);
         }
@@ -110,8 +115,8 @@ public class LearnJdbcTest {
                 assertEquals(3, rs.getInt("fruit_count"));
             }
 
-            // add a V2__add_fruit.sql file in the src/main/db/migration folder
-            // add a create table script in there to create a fruit table
+            // todo - add a V2__add_fruit.sql file in the src/main/db/migration folder
+            // todo - add a create table script in there to create a fruit table
 
             /*
                 insert into fruit (name, price) values ('red apple', 4.75);
@@ -120,7 +125,7 @@ public class LearnJdbcTest {
                 insert into fruit (name, price) values ('lemon', 5.75);
              */
 
-            // run the migration using the in your project root folder using:
+            // todo - run the migration using the in your project root folder using:
             // mvn flyway:migrate
 
         } catch (Exception e) {
@@ -183,12 +188,10 @@ public class LearnJdbcTest {
             // over and over with different parameters
             PreparedStatement findFruitPreparedStatement = conn.prepareStatement(FIND_FRUIT_SQL);
 
-            // use it to add 2 new fruits an Orange costing 2.37 and a Guava costing 4.13
+            // todo - why is this failing?
+            // todo - tip what parameter needs to set on the PreparedStatement be added here?
 
-            // why is this failing ?
             ResultSet rs = findFruitPreparedStatement.executeQuery();
-
-
             int counter = 0;
             while(rs.next()) {
                 counter++;
