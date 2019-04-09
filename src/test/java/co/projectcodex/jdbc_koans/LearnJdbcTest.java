@@ -25,15 +25,15 @@ public class LearnJdbcTest {
 
     @BeforeEach
     public void cleanUpTables() {
-
+        // don't touch any code in here!!!
         try {
             try(Connection conn = getConnection()) {
-                // delete fruits that the tests are adding
-
+                // I repeat don't touch any code in here!!!
                 Statement statement = conn.createStatement();
                 statement.addBatch("delete from fruit where name in ('Guava', 'Orange')");
                 statement.addBatch("update fruit set price = 4.75  where name = 'red apple'");
                 statement.executeBatch();
+                // I repeat once again don't touch any code in here!!!
             }
         } catch(Exception ex) {
             System.out.println("These test will fail until the fruit table is created: " + ex);
