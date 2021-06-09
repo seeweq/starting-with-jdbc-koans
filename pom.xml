@@ -23,6 +23,17 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
+            <plugin>
+                    <groupId>org.flywaydb</groupId>
+                    <artifactId>flyway-maven-plugin</artifactId>
+                    <version>7.9.2</version>
+                    <configuration>
+                        <url>jdbc:h2:./target/jdbc_koans_db</url>
+                        <user>sa</user>
+                        <password></password>
+                    </configuration>
+
+            </plugin>
         </plugins>
     </build>
 
@@ -40,11 +51,11 @@
             <version>5.4.0</version>
             <scope>test</scope>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>com.h2database</groupId>-->
-            <!--<artifactId>h2</artifactId>-->
-            <!--<version>1.4.199</version>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.199</version>
+        </dependency>
     </dependencies>
 
 </project>
