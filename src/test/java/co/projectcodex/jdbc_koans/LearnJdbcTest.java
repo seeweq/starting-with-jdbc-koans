@@ -61,7 +61,7 @@ public class LearnJdbcTest {
             Class.forName("org.h2.Driver");
             // to fix this set the KOANS_DATABASE_URL to a valid value of `jdbc:h2:./target/jdbc_koans_db` - it will create an
             // embedded database in the target folder
-            Connection conn = DriverManager.getConnection(KOANS_DATABASE_URL, "", "");
+            Connection conn = DriverManager.getConnection(KOANS_DATABASE_URL, "sa", "");
         } catch (Exception e) {
             fail(e);
         }
@@ -229,7 +229,9 @@ public class LearnJdbcTest {
 
             // todo - use the updateFruitPreparedStatement to update the apple price to 5.99 ...
             // todo - use the updateFruitPreparedStatement here
-
+            updateFruitPreparedStatement.setDouble(1,5.99);
+            updateFruitPreparedStatement.setString(2,"red apple");
+            updateFruitPreparedStatement.execute();
             // don't change any code below this line
             PreparedStatement findFruitPreparedStatement = conn.prepareStatement(FIND_FRUIT_BY_NAME_SQL);
             findFruitPreparedStatement.setString(1, "red apple");
